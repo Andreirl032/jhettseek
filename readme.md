@@ -132,5 +132,5 @@ Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
 
 ---
 
-**Desenvolvido por [Seu Nome/GitHub]** ✈️📈
+**Desenvolvido por Andrei Lopes (https://github.com/Andreirl032)** ✈️📈
 "Data is the new fuel, and timing is everything."
