@@ -1,136 +1,76 @@
+# 🚀 JhettSeek — O "Terminal Financeiro" das Viagens
+
+**JhettSeek** é uma plataforma preditiva de dados em formato de SaaS que trata passagens aéreas como ativos financeiros. Focada em otimizar a decisão de compra, a plataforma une Machine Learning, análise de séries temporais e visualização de dados avançada para responder não apenas *se* o usuário deve comprar agora, mas *qual a melhor época do ano* e *quais as melhores datas* para sua viagem.
+
+## 🎯 O Problema e a Solução
+
+A busca tradicional por voos é baseada no preço de hoje. O JhettSeek analisa a **volatilidade e a sazonalidade**.
+
+* **A Visão Macro (O Ano):** Através de *Heatmaps* (Mapas de Calor), o usuário visualiza rapidamente quais meses e semanas oferecem as melhores janelas de preço para uma viagem de *X* dias.
+* **A Visão Micro (A Semana/Hora):** Através de gráficos financeiros (*Candlesticks*), o sistema exibe o histórico recente de preços e sinaliza a tendência de curto prazo com recomendações claras de **COMPRA (Buy)** ou **ESPERA (Hold)**.
 
 ---
 
-# 🚀 JhettSeek — Flight Stock Market
+## 🛠️ Tech Stack & Ferramentas
 
-**JhettSeek** é uma plataforma de inteligência de dados que trata passagens aéreas como ativos do mercado financeiro. Utilizando Machine Learning e análise de séries temporais, o sistema transforma a volatilidade dos preços em gráficos preditivos, ajudando o usuário a decidir se deve "comprar" (buy) ou "esperar" (hold) uma passagem.
+O projeto utiliza uma arquitetura **Monolítica Modular** no backend (padrão *Controller-Service-Repository*) e um frontend altamente reativo, focado na experiência de usuário (UX).
 
-O objetivo central é responder: **"Este é o melhor preço possível para este voo ou a tendência é de queda?"**
-
----
-
-## ✈️ O Conceito
-
-Diferente de buscadores tradicionais que apenas mostram o preço atual, o JhettSeek foca na **estratégia de compra**.
-
-* **Voo como Ativo:** Cada rota (ex: GRU → JFK) é monitorada como uma ação da bolsa.
-* **Pressão de Demanda:** O sistema infere o esgotamento de assentos através de modelos de aceleração de preço e volatilidade.
-* **Previsão Probabilística:** Não prevemos o preço exato, mas sim a tendência e a janela de oportunidade ideal.
-
----
-
-## 🛠️ Tech Stack
-
-### Frontend
+### 🖥️ Frontend (Interface Analítica)
 
 * **Framework:** Next.js 14 (App Router) + TypeScript.
-* **Styling:** Tailwind CSS + Shadcn/UI.
-* **Gráficos:** Recharts / Lightweight Charts (estilo TradingView).
-* **Validação:** Zod.
+* **Estilização:** Tailwind CSS + Componentes Shadcn/UI.
+* **Gráficos (DataViz):** Recharts e Lightweight Charts (TradingView) para os Candlesticks; Nivo ou visx para os Heatmaps anuais.
+* **Validação de Dados:** Zod.
 
-### Backend (Microserviço de Inteligência)
+### ⚙️ Backend (O Motor de Regras e API)
 
-* **API:** FastAPI (Python).
-* **ORM:** SQLModel / SQLAlchemy.
-* **Database:** PostgreSQL.
-* **Arquitetura:** Controller-Service-Repository.
+* **Framework:** FastAPI (Python) para alta performance e suporte nativo a operações assíncronas.
+* **Banco de Dados:** PostgreSQL.
+* **ORM:** SQLAlchemy + Alembic (para migrações).
+* **Autenticação:** JWT (JSON Web Tokens).
 
-### Machine Learning & Data
+### 🧠 Inteligência Artificial & Dados
 
-* **Modelos:** XGBoost / LightGBM (Regressão para séries temporais).
-* **Processamento:** Pandas & Scikit-learn.
-* **Coleta:** Web Scraping (Playwright) & APIs (SerpApi / Tequila).
+* **Modelo de Machine Learning:** XGBoost / LightGBM (Regressão para Séries Temporais).
+* **Treinamento Base (Sazonalidade):** Datasets públicos de aviação (ex: Kaggle) para entender a "geometria" da variação de preços.
+* **Coleta de Dados em Tempo Real:** Integração com APIs especializadas (SerpApi / ScrapingDog) contornando bloqueios de scraping tradicional.
 
----
+### 💳 Infraestrutura e SaaS
 
-## 🏛️ Arquitetura do Sistema
-
-O projeto segue um padrão de **Monolito Modular** no backend para garantir escalabilidade e fácil manutenção:
-
-* **Controllers:** Gerenciam as rotas da API e validação de entrada (Pydantic).
-* **Services:** Contêm a lógica de negócio, orquestram as chamadas de ML e processam regras de "Buy/Hold".
-* **Repositories:** Abstraem o acesso ao PostgreSQL.
-* **ML Engine:** Camada isolada para treinamento e inferência de modelos.
+* **Pagamentos/Assinaturas:** Stripe (Foco Global) e Mercado Pago (Foco Brasil/PIX).
+* **Alertas e Mensageria:** Resend ou SendGrid para envio assíncrono de "Sinais de Compra" via e-mail.
 
 ---
 
-## 📋 Funcionalidades (MVP)
+## 📋 Funcionalidades Principais (MVP)
 
-* [x] **Dashboard Analítico:** Visualização de preços em formato de gráfico financeiro (Candlesticks/Linhas).
-* [x] **Indicador Buy/Hold:** Algoritmo que sugere a melhor ação baseada na tendência prevista.
-* [x] **Busca Flexível:** Sugestão de intervalos de datas para maximizar a economia.
-* [x] **Histórico de Volatilidade:** Monitoramento de como o preço se comportou nas últimas semanas.
-* [ ] **Conversor de Milhas (Roadmap):** Comparação em tempo real entre custo em Reais vs. Pontos.
-* [ ] **Price Freeze (Fintech):** Opção de travar o preço mediante uma taxa de reserva.
+* **Busca Macro a Micro:** Pesquisa de rotas com sugestão inteligente de melhores épocas para viajar baseado na duração da viagem.
+* **Dashboard de Ativos (Página da Rota):** Exibição do gráfico financeiro do voo, probabilidade de aumento de preço (medidor de risco) e listagem dos voos reais disponíveis para compra.
+* **Watchlist & Alertas (Feedback Loop):** O usuário adiciona uma rota à sua carteira. O sistema roda rotinas diárias (CRON) e dispara um e-mail automaticamente quando o preço atinge a zona ideal de compra.
+* **Sistema de Contas:** Perfis de usuário com gerenciamento de rotas monitoradas e controle de assinatura (SaaS).
 
 ---
 
-## 📂 Estrutura do Projeto
+## 📂 Estrutura de Diretórios (Monorepo)
 
 ```text
 jhettseek/
-├── frontend/                # Next.js Application
+├── frontend/                  # App Next.js
 │   ├── src/
-│   │   ├── app/             # App Router (Pages & Layouts)
-│   │   ├── components/      # UI Components (Charts, Forms)
-│   │   └── services/        # API Integration
-├── backend/                 # FastAPI Application
-│   ├── app/
-│   │   ├── api/             # Controllers (Routes)
-│   │   ├── services/        # Business Logic
-│   │   ├── repositories/    # Database Access
-│   │   ├── ml/              # Machine Learning Models & Training
-│   │   └── db/              # Migrations & Connection
-└── scripts/                 # Scrapers e tarefas agendadas (Cron)
+│   │   ├── app/               # Rotas (ex: /search, /route/[id], /profile)
+│   │   ├── components/        # UI (Gráficos, Heatmaps, Botões)
+│   │   └── lib/               # Validações (Zod) e utilitários
+│
+└── backend/                   # API FastAPI
+    ├── app/
+    │   ├── api/               # Controllers (Rotas HTTP: /flights, /users, /alerts)
+    │   ├── services/          # Regras de Negócio (Orquestração de Busca e ML)
+    │   ├── repositories/      # SQLAlchemy (Acesso ao PostgreSQL)
+    │   ├── models/            # Schemas Pydantic e Modelos do Banco
+    │   └── ml/                # Pipeline de Treinamento e Inferência (XGBoost)
+    ├── worker/                # CRON Jobs para atualizar preços e disparar e-mails
+    └── requirements.txt
 
 ```
 
----
-
-## 🚀 Como Executar
-
-### Pré-requisitos
-
-* Node.js (v18+)
-* Python (3.10+)
-* PostgreSQL
-
-### 1. Backend
-
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # venv\Scripts\activate no Windows
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-
-```
-
-### 2. Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-
-```
-
----
-
-## 📈 Roadmap de Evolução
-
-1. **Fase 1 (MVP):** Coleta de dados de 50 rotas principais e modelo de regressão baseline.
-2. **Fase 2:** Implementação de alertas via Telegram/WhatsApp para "Sinais de Compra".
-3. **Fase 3:** Integração de APIs de GDS (Amadeus/Skyscanner) para escala global.
-4. **Fase 4:** Inteligência de Milhas e Arbitragem de passagens.
-
----
-
-## ⚖️ Licença
-
-Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
-
----
-
-**Desenvolvido por Andrei Lopes (https://github.com/Andreirl032)** ✈️📈
-"Data is the new fuel, and timing is everything."
+**Desenvolvido com visão de engenharia e foco em dados.** ✈️📈
